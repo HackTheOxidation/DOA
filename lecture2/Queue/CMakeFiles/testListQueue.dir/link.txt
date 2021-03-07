@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/testListQueue.dir/testListQueue.cpp.o  -o testListQueue  -Wl,-Bstatic -lgtest -Wl,-Bdynamic -lpthread 

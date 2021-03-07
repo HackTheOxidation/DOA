@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture2/Queue/ListQueue.hpp
+Queue.hpp
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture2/Queue/Queue.hpp
+iostream
+-
+exception
+-
+list
+-
+
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture2/Queue/Queue.hpp
+
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture2/Queue/testListQueue.cpp
+ListQueue.hpp
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture2/Queue/ListQueue.hpp
+iostream
+-
+gtest/gtest.h
+-
+

@@ -1,0 +1,3 @@
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture2/Stack/CMakeFiles/rebuild_cache.dir
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture2/Stack/CMakeFiles/edit_cache.dir
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture2/Stack/CMakeFiles/executeTests.dir

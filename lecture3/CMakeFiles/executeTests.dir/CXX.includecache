@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture3/HashMap.hpp
+Pair.h
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture3/Pair.h
+iostream
+-
+
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture3/Pair.h
+iostream
+-
+
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture3/testHashMap.cpp
+HashMap.hpp
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture3/HashMap.hpp
+iostream
+-
+string
+-
+gtest/gtest.h
+-
+

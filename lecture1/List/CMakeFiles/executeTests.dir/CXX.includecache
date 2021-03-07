@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture1/List/LinkedList.hpp
+List.hpp
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture1/List/List.hpp
+iostream
+-
+
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture1/List/List.hpp
+
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture1/List/VectorList.hpp
+List.hpp
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture1/List/List.hpp
+iostream
+-
+exception
+-
+vector
+-
+
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture1/List/testLists.cpp
+LinkedList.hpp
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture1/List/LinkedList.hpp
+VectorList.hpp
+/home/tomas/Nextcloud/Skole/semester3/DOA/lecture1/List/VectorList.hpp
+iostream
+-
+exception
+-
+string
+-
+gtest/gtest.h
+-
+
