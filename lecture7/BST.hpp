@@ -43,19 +43,23 @@ public:
     return search(this->root, data);
   }
 
+  void print() const {
+    print(root, 0);
+  }
+
 private:
   Node<T> *root;
 
   void insert(Node<T>*& root, const T& data) {
     if (!root)
       root = new Node<T>(data);
-    else if (root->data > data)
-      insert(root->right, data);
     else if (root->data < data)
+      insert(root->right, data);
+    else if (root->data > data)
       insert(root->left, data);
   }
 
-  void remove(Node<T>*& root, Node<T>*& parent, const T& data) {
+  void remove(Node<T>* root, Node<T>* parent, const T& data) {
     if (!root)
       return;
     else if (data < root->data)
@@ -66,7 +70,7 @@ private:
       removeNode(root, parent);
   }
 
-  void removeNode(Node<T>*& node, Node<T>*& parent) {
+  void removeNode(Node<T>* node, Node<T>* parent) {
     if (node->left != nullptr && node->right != nullptr) {
       Node<T> *min = node->right;
       Node<T> *minParent = node;
@@ -78,7 +82,7 @@ private:
 	parent->right = min;
       }
       min->right = node->right;
-      min-left = node->left;
+      min->left = node->left;
 
       node->left = nullptr;
       node->right = nullptr;
@@ -109,7 +113,7 @@ private:
     }
   }
 
-  void findMin(Node<T>*& node, Node<T>*& parent) {
+  void findMin(Node<T>* node, Node<T>* parent) {
     if (node->left == nullptr) {
       parent->left = node->right;
       return;
@@ -129,6 +133,20 @@ private:
       return search(root->right, data);
     else
       return true;
+  }
+
+  void print(Node<T>* node, int depth) const {
+    string spaces = "";
+    for (int i = 0; i < depth; i++)
+      spaces = spaces + "   ";
+
+    if (node->right != nullptr) 
+      print(node->right, depth + 1);
+
+    cout << spaces << node->data << endl;
+
+    if (node->left != nullptr) 
+      print(node->left, depth + 1);
   }
 
 };
