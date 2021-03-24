@@ -153,6 +153,32 @@ private:
     }
   }
 
+  void rotateLeft(Node<T>* node, Node<T>* parent) {
+    Node<T> *right = node->right;
+    Node<T> *rightLeft = right->left;
+
+    right->left = node;
+    node->right = rightLeft;
+
+    if (parent->left == node)
+      parent->left = right;
+    else if (parent->right == node)
+      parent->right = right;
+  }
+
+  void rotateRight(Node<T>* node, Node<T>* parent) {
+    Node<T> *left = node->left;
+    Node<T> *leftRight = left->right;
+
+    left->right = node;
+    node->left = leftRight;
+
+    if (parent->left == node)
+      parent->left = left;
+    else if (parent->right == node)
+      parent->right = left;
+  }
+
   void print(Node<T>* node, int depth) const {
     string spaces = "";
     for (int i = 0; i < depth; i++)
