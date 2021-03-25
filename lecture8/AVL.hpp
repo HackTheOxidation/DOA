@@ -51,12 +51,15 @@ private:
   Node<T> *root;
 
   void insert(Node<T>*& root, const T& data) {
-    if (!root)
+    if (!root) {
       root = new Node<T>(data);
-    else if (root->data < data)
+    } else if (root->data < data) {
       insert(root->right, data);
-    else if (root->data > data)
+    } else if (root->data > data) {
       insert(root->left, data);
+    }
+
+    balance(this->root, nullptr);
   }
 
   void remove(Node<T>* root, Node<T>* parent, const T& data) {
@@ -135,22 +138,48 @@ private:
       return true;
   }
 
-  int height(Node<T>* node) const {
-    if (node->left == nullptr && node->right == nullptr) {
-      return 1;
-    } else if (node->left != nullptr && node->right == nullptr) {
-      return 1 + height(node->left);
-    } else if (node->left == nullptr && node->right != nullptr) {
-      return 1 + height(node->right);
+  void balance(Node<T>* node, Node<T>* parent) {
+    if (node == nullptr) {
+      return;
     } else {
-      int left = height(node->left);
-      int right = height(node->right);
+      int bal = height(node->left) - height(node->right);
 
-      if (left >= right)
-	return 1 + left;
-      else
-	return 1 + right;
+      if (bal > 1 && node->data > node->left->data) {
+	rotateRight(node, parent);
+      } else if (bal < -1 && node->data < node->right->data) {
+	rotateLeft(node, parent);
+      } else if (bal > 1 && node->data < node->left->data) {
+	rotateLeft(node->left, node);
+	rotateRight(node, parent);
+      } else if (bal < -1 && node->data > node->right->data) {
+	rotateRight(node->right, node);
+	rotateLeft(node, parent);
+      }
+
+      balance(node->left, node);
+      balance(node->right, node);
     }
+  }
+
+  int height(Node<T>* node) const {
+    if (node != nullptr) {
+      if (node->left == nullptr && node->right == nullptr) {
+	return 1;
+      } else if (node->left != nullptr && node->right == nullptr) {
+	return 1 + height(node->left);
+      } else if (node->left == nullptr && node->right != nullptr) {
+	return 1 + height(node->right);
+      } else {
+	int left = height(node->left);
+	int right = height(node->right);
+	
+	if (left >= right)
+	  return 1 + left;
+	else
+	  return 1 + right;
+      }
+    } else
+      return 0;
   }
 
   void rotateLeft(Node<T>* node, Node<T>* parent) {
@@ -160,10 +189,14 @@ private:
     right->left = node;
     node->right = rightLeft;
 
-    if (parent->left == node)
-      parent->left = right;
-    else if (parent->right == node)
-      parent->right = right;
+    if (parent != nullptr) {
+      if (parent->left == node)
+	parent->left = right;
+      else if (parent->right == node)
+	parent->right = right;
+    } else {
+      this->root = right;
+    }
   }
 
   void rotateRight(Node<T>* node, Node<T>* parent) {
@@ -173,21 +206,22 @@ private:
     left->right = node;
     node->left = leftRight;
 
-    if (parent->left == node)
-      parent->left = left;
-    else if (parent->right == node)
-      parent->right = left;
+    if (parent != nullptr) {
+      if (parent->left == node)
+	parent->left = left;
+      else if (parent->right == node)
+	parent->right = left;
+    } else {
+      this->root = left;
+    }
   }
 
   void print(Node<T>* node, int depth) const {
-    string spaces = "";
-    for (int i = 0; i < depth; i++)
-      spaces = spaces + "   ";
 
     if (node->right != nullptr) 
       print(node->right, depth + 1);
 
-    cout << spaces << node->data << endl;
+    cout << node->data << endl;
 
     if (node->left != nullptr) 
       print(node->left, depth + 1);
