@@ -1,24 +1,24 @@
 #ifndef SKIPLISTS_H_
 #define SKIPLISTS_H_
 
+#define MAXLEVEL 6
+
 typedef struct Node {
   int key;
-  struct Node* forward[]; 
+  int value;
+  struct Node** forward; 
 } Node;
 
 typedef struct SkipLists {
-  unsigned int maxLevel;
-  float P;
-  unsigned int level;
+  int level;
+  int size;
   struct Node* header; 
 } SkipList;
 
-int searchSkipList(SkipList* list, int searchKey);
-void insertSkipListNode(SkipList* list, int newValue);
-void deleteSkipListNode(SkipList* list, int searchKey);
-unsigned int randomLevel(SkipList* list);
-SkipList* createSkipList(unsigned int maxLevel, float P);
-void deleteSkipList(SkipList* list);
-struct Node* makeNode(int key, unsigned int level);
+Node* searchSkipList(SkipList* list, int searchKey);
+int insertSkipListNode(SkipList* list, int key, int value);
+int deleteSkipListNode(SkipList* list, int key);
+static int randomLevel();
+SkipList* initSkipList(SkipList* list);
 
 #endif

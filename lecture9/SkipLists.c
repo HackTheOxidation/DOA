@@ -2,116 +2,123 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 // Recursive helper method for search
-int find(Node* x, int searchKey, unsigned int level) {
-  if (x && x->forward[level] && x->forward[level]->key == searchKey) {
-    x = x->forward[0];
-    return 1;
-  } else if (x->forward[level] && x->forward[level]->key < searchKey) {
-    return find(x->forward[level], searchKey, level);
+Node* find(Node* x, int key, unsigned int level) {
+  if (x && x->forward[level] && x->forward[level]->key == key) {
+    return x = x->forward[1];
+  } else if (x->forward[level] && x->forward[level]->key < key) {
+    return find(x->forward[level], key, level);
   } else {
-    if (level == 0)
-      return 0;
+    if (level == 1)
+      return NULL;
 
-    return find(x, searchKey, level - 1);
+    return find(x, key, level - 1);
   }
 }
 
-int searchSkipList(SkipList* list, int searchKey) {
-  // Original iterative method
+Node* searchSkipList(SkipList* list, int key) {
+  // Original Iterative Search Method
+  /*
   Node* x = list->header;
-  for (int i = list->level; i >= 0; i--) {
-    while (x->forward[i] &&
-        x->forward[i]->key < searchKey)
+  for (int i = list->level; i >= 1; i--) {
+    while (x->forward[i]->key < key)
       x = x->forward[i];
   }
-  x = x->forward[0];
-  
-  return (x && x->key == searchKey);
-  //return find(list->header, searchKey, list->level);
+  if (x->forward[1]->key == key) {
+    return x->forward[1];
+  } else {
+    return NULL;
+  }
+  return NULL;
+  */
+  return find(list->header, key, list->level);
 }
 
-void insertSkipListNode(SkipList* list, int newValue) {
-  Node** update = malloc(sizeof(Node*) * (list->maxLevel + 1));
-  memset(update, 0, sizeof(Node*) * (list->maxLevel + 1));
+int insertSkipListNode(SkipList* list, int key, int value) {
+  Node* update[MAXLEVEL + 1];
   Node* x = list->header;
-  for (int i = list->level; i >= 0; i--) {
-    while (x->forward[i] != NULL &&
-        x->forward[i]->key < newValue)
+  int level;
+  for (int i = list->level; i >= 1; i--) {
+    while (x->forward[i]->key < key)
       x = x->forward[i];
     update[i] = x;
   }
-  x = x->forward[0];
-  if (x == NULL || x->key != newValue) {
-    int lvl = randomLevel(list);
-    if (lvl > list->level) {
-      for (int i = list->level + 1; i < lvl+1; i++)
+  x = x->forward[1];
+
+  if (key == x->key) {
+    x->value = value;
+    return 0;
+  } else {
+    level = randomLevel();
+    if (level > list->level) {
+      for (int i = list->level+1; i <= level; i++) {
         update[i] = list->header;
-      list->level = lvl;
+      }
+      list->level = level;
     }
-    x = makeNode(newValue, lvl);
-    for (int i = 0; i <= lvl; i++) {
+
+    x = (Node*) malloc(sizeof(Node));
+    x->key = key;
+    x->value = value;
+    x->forward = (Node**) malloc(sizeof(Node*) * (level + 1));
+    for (int i = 1; i <= level; i++) {
       x->forward[i] = update[i]->forward[i];
       update[i]->forward[i] = x;
     }
-    printf("Successfully Inserted key %d\n", newValue);
   }
-  free(update);
+  return 0;
 }
 
-void deleteSkipListNode(SkipList* list, int searchKey) {
-  Node** update = malloc(sizeof(Node*) * (list->maxLevel + 1));
-  memset(update, 0, sizeof(Node*) * (list->maxLevel + 1));
+int deleteSkipListNode(SkipList* list, int key) {
+  Node* update[MAXLEVEL + 1];
   Node* x = list->header;
-  for (int i = list->level; i >= 0; i--) {
-    while (x->forward[i] != NULL && x->forward[i]->key < searchKey)
+  for (int i = list->level; i >= 1; i--) {
+    while (x->forward[i]->key < key) 
       x = x->forward[i];
     update[i] = x;
   }
-  x = x->forward[0];
-  if (x != NULL && x->key == searchKey) {
-    for (int i = 0; i < list->level; i++) {
+
+  x = x->forward[1];
+  if (x->key == key) {
+    for (int i = 1; i <= list->level; i++) {
       if (update[i]->forward[i] != x)
         break;
       update[i]->forward[i] = x->forward[i];
     }
-    free(x);
-    while (list->level > 0 &&
-        list->header->forward[list->level] == NULL)
+    if (x) {
+      free(x->forward);
+      free(x);
+    }
+    while (list->level > 1 && list->header->forward[list->level] == list->header)
       list->level--;
-    printf("Successfully deleted key %d\n", searchKey);
+    return 0;
   }
-  free(update);
+  return 1;
 }
 
-unsigned int randomLevel(SkipList* skiplist) {
-  unsigned int level = 0;
-  int r = rand(); 
-  while (r < skiplist->P && level < skiplist->maxLevel) {
+static int randomLevel() {
+  int level = 1;
+  while (rand() < RAND_MAX/2 && level < MAXLEVEL) {
     level++;
-    r = rand();
   }
 
   return level;
 }
 
-SkipList* createSkipList(unsigned int maxLevel, float P) {
-  SkipList* list = (SkipList*) malloc(sizeof(SkipList));
-  list->maxLevel = maxLevel;
-  list->P = P;
-  list->header = makeNode(-1, maxLevel);
+SkipList* initSkipList(SkipList* list) {
+  Node* header = (Node*) malloc(sizeof(struct Node));
+  list->header = header;
+  header->key = INT_MAX;
+  header->forward = (Node**) malloc(sizeof(Node*) * (MAXLEVEL + 1));
+  for (int i = 0; i <= MAXLEVEL; i++) {
+    header->forward[i] = list->header;
+  }
 
+  list->level = 1;
+  list->size = 0;
+  
   return list;
 }
 
-void deleteSkipList(SkipList* list) {
-  free(list);
-}
-
-Node* makeNode(int key, unsigned int level) {
-  Node* node = (Node*) malloc(sizeof(Node) * (level + 1));
-  node->key = key;
-  memset(node->forward, 0, sizeof(Node*) * (level + 1));
-  return node;
-}

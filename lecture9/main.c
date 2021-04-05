@@ -6,21 +6,33 @@
 int main(void) {
   srand((unsigned) time(NULL));
 
-  SkipList* skiplist = createSkipList(5, 0.5);
+  SkipList* skiplist;  
+  initSkipList(skiplist);
 
-  int is1 = searchSkipList(skiplist, 1);
-  printf("Is 1 in the list: %d\n", is1);
+  Node* x = searchSkipList(skiplist, 1);
+  if (x) {
+    printf("1 is in the list!\n");
+  } else {
+    printf("1 is NOT in the list\n");
+  }
 
-  insertSkipListNode(skiplist, 1);
+  insertSkipListNode(skiplist, 1, 1);
 
-  is1 = searchSkipList(skiplist, 1);
-  printf("Is 1 in the list: %d\n", is1);
+  x = searchSkipList(skiplist, 1);
+  if (x) {
+    printf("1 is in the list!\n");
+  } else {
+    printf("1 is NOT in the list\n");
+  }
 
   deleteSkipListNode(skiplist, 1);
 
-  is1 = searchSkipList(skiplist, 1);
-  printf("Is 1 in the list: %d\n", is1);
+  x = searchSkipList(skiplist, 1);
+  if (x) {
+    printf("1 is in the list!\n");
+  } else {
+    printf("1 is NOT in the list\n");
+  }
 
-  deleteSkipList(skiplist);
   return 0;
 }
