@@ -106,6 +106,19 @@ public:
 	void findAllWithPrefix(string prefix, vector<string>& strings) const
 	{
 		// YOUR CODE GOES HERE
+		TrieNode* prefixEnd;
+		int len = findPrefixEnd(prefix, prefixEnd);
+
+		if (len != prefix.length())
+			return;
+
+		strings.push_back(prefix);
+		if (prefixEnd->children.empty())
+			return;
+
+		for (pair<char, TrieNode*> p : prefixEnd->children) {
+			traverse(prefix, strings, p.second);
+		}
 	}
 
 
@@ -133,6 +146,18 @@ private:
 		return i;
 	}
 
+	void traverse(string str, vector<string>& strings, TrieNode* cur) const {
+		str += cur->val;
+		if (cur->completesWord)
+			strings.push_back(str);
+
+		if (cur->children.empty())
+			return;
+		
+		for (pair<char, TrieNode*> p : cur->children) {
+			traverse(str, strings, p.second);
+		}
+	}
 
 	TrieNode* root;
 };
